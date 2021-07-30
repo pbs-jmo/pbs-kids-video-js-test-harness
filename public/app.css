@@ -1,0 +1,9 @@
+body { 
+    background: #555;
+    color: white;
+    font-family: Helvetica, Arial, sans-serif;
+}
+input {
+    width: 100%;
+    box-sizing: border-box;
+}
