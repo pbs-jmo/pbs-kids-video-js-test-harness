@@ -17,12 +17,12 @@ var keySystems = {
         certificateUri: fairplayCertificateUri,
         // dynamically obtain the DRM CID for this HLS asset when the DRM system sees an EXT-X-KEY tag
         getContentId: function (emeOptions, initData) {
-            skd_uri = String.fromCharCode.apply(null, new Uint16Array(initData.buffer))
+            var skd_uri = String.fromCharCode.apply(null, new Uint16Array(initData.buffer));
             return skd_uri.split(';')[1]; // e.g. skd://fps.ezdrm.com;<cid>
         },
         // construct license key request on the fly with the CID
         getLicense: function (emeOptions, contentId, keyMessage, callback) {
-            const headers = videojs.mergeOptions(
+            var headers = videojs.mergeOptions(
                 {'Content-type': 'application/octet-stream'},
                 emeOptions.emeHeaders
             );
@@ -39,16 +39,16 @@ var keySystems = {
                 }
                 // if the HTTP status code is 4xx or 5xx, the request also failed
                 if (response.statusCode >= 400 && response.statusCode <= 599) {
-                    let cause = String.fromCharCode.apply(null, new Uint8Array(responseBody));
+                    var cause = String.fromCharCode.apply(null, new Uint8Array(responseBody));
                     callback({cause}); // return the error from the decoded responseBody to the DRM system
                     return;
                 }
-            
+  
                 // otherwise, request succeeded
                 callback(null, responseBody); // return the key to the DRM system
-            })
+            });
         }
-    }
+    },
 };
 
 /*
@@ -82,3 +82,10 @@ const vodUrls = isSafari ? [
 ] : [
     'https://ga.video.cdn.pbs.org/videos/drm-test/ed008251-f328-4fbb-bed6-9a21ff4c7b28/dash-cenc/4ncw182043lorrainescoffee-mux.mpd',
 ];
+
+export {
+    isSafari,
+    keySystems,
+    livestreamUrls,
+    vodUrls,
+};

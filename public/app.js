@@ -1,3 +1,10 @@
+import {
+    isSafari,
+    keySystems,
+    livestreamUrls,
+    vodUrls,
+} from './config.js';
+
 const createPlayer = (livestreamEnabled) => {
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
