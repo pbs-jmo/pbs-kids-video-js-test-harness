@@ -3,7 +3,7 @@ body {
     color: white;
     font-family: Helvetica, Arial, sans-serif;
 }
-input {
+input:not([type=radio]) {
     width: 100%;
     box-sizing: border-box;
 }

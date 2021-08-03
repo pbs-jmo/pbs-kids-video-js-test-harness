@@ -9,7 +9,9 @@ const createPlayer = (livestreamEnabled) => {
         preload: 'auto',
     });
 
-    player.eme();
+    if (typeof player.eme === 'function') {
+        player.eme();
+    }
 
     const getSourceUrl = (livestream, index = 0) =>
         transformSources(getMockData(livestream, index));
@@ -79,4 +81,21 @@ const getMockData = function(isLivestream, index = 0) {
     }
 };
 
-createPlayer(true);
+const streamTypeRadioButtons = Array.prototype.slice.call(
+    document.querySelectorAll('input[name="stream-type"]')
+);
+
+streamTypeRadioButtons.forEach((inputEle) => {
+    // init player as stream type already selected
+    if (inputEle.checked) {
+        createPlayer(
+            inputEle.getAttribute('value') === 'livestream'
+        );
+    }
+    // allow the stream type to be dynamically changed by the user
+    inputEle.addEventListener('change', function(e) {
+        createPlayer(
+            e.target.getAttribute('value') === 'livestream'
+        );
+    });
+});
