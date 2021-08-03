@@ -7,8 +7,7 @@ var widevineLicenseUrl = 'https://widevine-dash.ezdrm.com/widevine-php/widevine-
 // var playReadyLicenseUrl = 'https://playready.ezdrm.com/cency/preauth.aspx?pX=334B2C';
 
 // DRM keySystem certificate Url for Safari
-var fairplayLicenseResource = 'skd://fps.ezdrm.com/;90656106-9ae3-45f1-adf9-1c21aeeed82d';
-var fairplayLicenseUri = 'https://fps.ezdrm.com/api/licenses/' + fairplayLicenseResource.split(';')[1];
+var fairplayLicenseUri = 'https://fps.ezdrm.com/api/licenses/';
 var fairplayCertificateUri = 'https://d2aieihupeq7i1.cloudfront.net/ezdrm-test/fairplay.cer';
 
 var keySystems = {
@@ -16,8 +15,40 @@ var keySystems = {
     'com.widevine.alpha': widevineLicenseUrl,
     'com.apple.fps.1_0': {
         certificateUri: fairplayCertificateUri,
-        licenseUri: fairplayLicenseUri,
-    },
+        // dynamically obtain the DRM CID for this HLS asset when the DRM system sees an EXT-X-KEY tag
+        getContentId: function (emeOptions, initData) {
+            skd_uri = String.fromCharCode.apply(null, new Uint16Array(initData.buffer))
+            return skd_uri.split(';')[1]; // e.g. skd://fps.ezdrm.com;<cid>
+        },
+        // construct license key request on the fly with the CID
+        getLicense: function (emeOptions, contentId, keyMessage, callback) {
+            const headers = videojs.mergeOptions(
+                {'Content-type': 'application/octet-stream'},
+                emeOptions.emeHeaders
+            );
+            videojs.xhr({
+                url: fairplayLicenseUri + contentId,
+                method: 'POST',
+                responseType: 'arraybuffer',
+                body: keyMessage,  // fairplay drm challenge
+                headers
+            }, function (err, response, responseBody) {
+                if (err) {
+                    callback(err); // return the error to the DRM system
+                    return;
+                }
+                // if the HTTP status code is 4xx or 5xx, the request also failed
+                if (response.statusCode >= 400 && response.statusCode <= 599) {
+                    let cause = String.fromCharCode.apply(null, new Uint8Array(responseBody));
+                    callback({cause}); // return the error from the decoded responseBody to the DRM system
+                    return;
+                }
+            
+                // otherwise, request succeeded
+                callback(null, responseBody); // return the key to the DRM system
+            })
+        }
+    }
 };
 
 /*
