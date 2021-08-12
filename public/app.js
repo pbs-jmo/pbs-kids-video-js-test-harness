@@ -10,7 +10,7 @@ const createPlayer = (livestreamEnabled) => {
 
     videojs.log.level('debug');
 
-    const player = videojs('video-element',  {
+    const player = window._player = videojs('video-element',  {
         controls: true,
         autoplay: true,
         preload: 'auto',
