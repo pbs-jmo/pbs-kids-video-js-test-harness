@@ -21,7 +21,7 @@ const createPlayer = (livestreamEnabled) => {
     }
 
     const getSourceUrl = (livestream, index = 0) =>
-        transformSources(getMockData(livestream, index));
+        transformSources(livestream ? livestreamUrls[index] : vodUrls[index]);
 
     const setSourceUrl = (livestream, index = 0) => {
         const sources = getSourceUrl(livestream, index);
@@ -53,38 +53,25 @@ const createPlayer = (livestreamEnabled) => {
 };
 
 const transformSources = function(video) {
-    if (isSafari && video && video.drm_hls) {
+    if (!video) return;
+
+    if (isSafari && video.hlsSrc) {
         // Safari uses an HLS stream
         return [
             {
-                src: video.drm_hls,
+                src: video.hlsSrc,
                 type: 'application/x-mpegURL',
-                keySystems: keySystems,
+                keySystems: keySystems(video),
             }
         ];
-    } else if (video && video.drm_dash) {
+    } else if (video.dashSrc) {
         return [
             {
-                src: video.drm_dash,
+                src: video.dashSrc,
                 type: 'application/dash+xml',
-                keySystems: keySystems,
+                keySystems: keySystems(video),
             }
         ];
-    }
-};
-
-// Fake returning the correct data from CS:
-const getMockData = function(isLivestream, index = 0) {
-    if (isLivestream) {
-        return {
-            drm_hls: livestreamUrls[index],
-            drm_dash: livestreamUrls[index],
-        };
-    } else {
-        return {
-            drm_hls: vodUrls[index],
-            drm_dash: vodUrls[index],
-        };
     }
 };
 
