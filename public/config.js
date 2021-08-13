@@ -3,7 +3,7 @@ var isSafari = videojs.browser.IS_ANY_SAFARI;
 var keySystems = (video) => {
     return {
         // DRM keySystem for Edge
-        // 'com.microsoft.playready': video.playReadyLicenseUrl,
+        'com.microsoft.playready': video.playReadyLicenseUrl,
         // DRM keySystem for Chrome, Firefox, etc.
         'com.widevine.alpha': video.widevineLicenseUrl,
         'com.apple.fps.1_0': {
@@ -11,7 +11,6 @@ var keySystems = (video) => {
             getContentId: function (emeOptions, initData) {
                 return String.fromCharCode.apply(null, new Uint16Array(initData.buffer));
             },
-            // construct license key request on the fly with the CID
             certificateUri: video.fairPlayCertificateServerUrl,
             licenseUri: video.fairPlayLicenseServerUrl,
         },
