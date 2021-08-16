@@ -54,12 +54,20 @@ const livestreamUrls = [
 
 const vodUrls = [
     {
-        hlsSrc: 'https://ga.video-dev.cdn.pbs.org/staging/videos/taz-show/b17cca07-c4e7-4b61-a80a-a7a932c66ab5/41/hd-16x9-mezzanine-1080p/pbs-hls-16x9-1080p.m3u8',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b17cca07-c4e7-4b61-a80a-a7a932c66ab5',
+        hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/b474c97f-5311-4b09-bc03-85d4426b7aab/drm/cuge1110-ep-hls-16x9-1080p-drm.m3u8',
+        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b474c97f-5311-4b09-bc03-85d4426b7aab',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://ga.video-dev.cdn.pbs.org/staging/videos/taz-show/b17cca07-c4e7-4b61-a80a-a7a932c66ab5/41/hd-16x9-mezzanine-1080p/pbs-dash-iso.mpd',
-        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/b17cca07-c4e7-4b61-a80a-a7a932c66ab5',
-        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b17cca07-c4e7-4b61-a80a-a7a932c66ab5',
+        dashSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/b474c97f-5311-4b09-bc03-85d4426b7aab/drm/cuge1110-ep-dash-16x9-1080p-drm.mpd',
+        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/b474c97f-5311-4b09-bc03-85d4426b7aab',
+        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b474c97f-5311-4b09-bc03-85d4426b7aab',
+    },
+    {
+        hlsSrc: 'https://ga.video.cdn.pbs.org/videos/great-performances/7fe81f87-bd5c-4f14-afc3-35b61e26c953/drm/viennasummernight_promo_mm1-hls-16x9-1080p-drm.m3u8',
+        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/7fe81f87-bd5c-4f14-afc3-35b61e26c953',
+        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
+        dashSrc: 'https://ga.video.cdn.pbs.org/videos/great-performances/7fe81f87-bd5c-4f14-afc3-35b61e26c953/drm/viennasummernight_promo_mm1-dash-16x9-1080p-drm.mpd',
+        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/7fe81f87-bd5c-4f14-afc3-35b61e26c953',
+        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/7fe81f87-bd5c-4f14-afc3-35b61e26c953',
     }
 ];
 
