@@ -27,6 +27,7 @@ const createPlayer = (livestreamEnabled) => {
         const sources = getSourceUrl(livestream, index);
         const url = sources && sources[0] ? sources[0].src : null;
         if (url) {
+            console.log('player.src getting set to:', JSON.stringify(sources[0], null, 2));
             player.src(sources[0]);
             currentSrcEle.value = url;
             
