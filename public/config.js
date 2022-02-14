@@ -54,6 +54,11 @@ const livestreamUrls = [
 
 const vodUrls = [
     {
+        hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/eeb2331a-8aee-47c2-ad1b-bdc03a464f88/2000277314/hd-16x9-mezzanine-1080p/cuge507_4_m1080-hls-16x9-720p.m3u8',
+        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
+        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
+    },
+    {
         hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/b474c97f-5311-4b09-bc03-85d4426b7aab/drm/cuge1110-ep-hls-16x9-1080p-drm.m3u8',
         fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b474c97f-5311-4b09-bc03-85d4426b7aab',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
