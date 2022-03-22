@@ -38,42 +38,34 @@ https://pbs.slack.com/archives/C01MYNDL9K5/p1628680921079800
 
 const livestreamUrls = [
     {
-        hlsSrc: 'https://livestream.pbskids.org/out/v1/2e683b59e3874fe7b0bcd944d8d80fc2/est-hls-drm.m3u8',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/0cbc335f-919f-494a-8987-dd0005e19a6f-hls',
+        hlsSrc: 'https://livestream-staging.pbskids.org/out/v1/587e9392056c4a5c8be472499459ebe2/est-hls-drm2.m3u8',
+        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/est-hls2',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://livestream.pbskids.org/out/v1/61da68205f194a9ca76d4a8317497de2/est-dash-drm.mpd',
-        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/0cbc335f-919f-494a-8987-dd0005e19a6f-dash',
-        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/0cbc335f-919f-494a-8987-dd0005e19a6f-dash',
-    },
-    {
-        hlsSrc: 'https://khetdt.lls.cdn.pbs.org/out/v1/c8025cac65da40caab33187346b8c960/hls-drm.m3u8',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/91a2b86d-c975-4264-a86f-dd0dcc9d6cd7-hls',
-        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
+        dashSrc: 'https://livestream-staging.pbskids.org/out/v1/a8637660f49049c69cccd1d8266905a6/est-dash-drm2.mpd',
+        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/est-dash2',
+        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/est-dash2',
     },
 ];
 
 const vodUrls = [
     {
         hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/eeb2331a-8aee-47c2-ad1b-bdc03a464f88/2000277314/hd-16x9-mezzanine-1080p/cuge507_4_m1080-hls-16x9-720p.m3u8',
-        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
         fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
-    },
-    {
-        hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/b474c97f-5311-4b09-bc03-85d4426b7aab/drm/cuge1110-ep-hls-16x9-1080p-drm.m3u8',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b474c97f-5311-4b09-bc03-85d4426b7aab',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/b474c97f-5311-4b09-bc03-85d4426b7aab/drm/cuge1110-ep-dash-16x9-1080p-drm.mpd',
-        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/b474c97f-5311-4b09-bc03-85d4426b7aab',
-        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b474c97f-5311-4b09-bc03-85d4426b7aab',
+        dashSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/eeb2331a-8aee-47c2-ad1b-bdc03a464f88/2000277314/hd-16x9-mezzanine-1080p/cuge507_4_m1080-dash-16x9-720p.mpd',
+        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
+        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
     },
+    /*
     {
-        hlsSrc: 'https://ga.video.cdn.pbs.org/videos/great-performances/7fe81f87-bd5c-4f14-afc3-35b61e26c953/drm/viennasummernight_promo_mm1-hls-16x9-1080p-drm.m3u8',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/7fe81f87-bd5c-4f14-afc3-35b61e26c953',
-        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://ga.video.cdn.pbs.org/videos/great-performances/7fe81f87-bd5c-4f14-afc3-35b61e26c953/drm/viennasummernight_promo_mm1-dash-16x9-1080p-drm.mpd',
-        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/7fe81f87-bd5c-4f14-afc3-35b61e26c953',
-        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/7fe81f87-bd5c-4f14-afc3-35b61e26c953',
-    }
+        hlsSrc: '',
+        fairPlayLicenseServerUrl: '',
+        fairPlayCertificateServerUrl: '',
+        dashSrc: '',
+        widevineLicenseUrl: '',
+        playReadyLicenseUrl: '',
+    },
+    */
 ];
 
 export {
