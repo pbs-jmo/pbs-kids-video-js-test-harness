@@ -69,6 +69,16 @@ const livestreamUrls = [
 ];
 
 const vodUrls = [
+    // Sci Girls - Bee Haven
+    {
+        hlsSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-hls-16x9-720p.m3u8',
+        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
+        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
+        dashSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-dash-16x9-720p.mpd',
+        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
+        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
+    },
+    // Curious George - George Feels Sheepish
     {
         hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/eeb2331a-8aee-47c2-ad1b-bdc03a464f88/2000277314/hd-16x9-mezzanine-1080p/cuge507_4_m1080-hls-16x9-720p.m3u8',
         fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
