@@ -7,7 +7,15 @@
     <script src="./lib/video.min.js"></script>
     <script src="./lib/videojs-contrib-hls.min.js"></script>
     <script src="./lib/videojs-contrib-eme.min.js"></script>
-    <script src="./lib/videojs-dash.min.js"></script>
+    <script>
+        window._dashEnabled = !window.location.search.match(/\bdashoff=true\b/);
+
+        if (window._dashEnabled) {
+            const dashScript = document.createElement('script');
+            dashScript.src = './lib/videojs-dash.min.js';
+            document.head.appendChild(dashScript);
+        }
+    </script>
 </head>
 <body>
 

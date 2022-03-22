@@ -6,6 +6,8 @@ import {
     vodUrls,
 } from './config.js';
 
+const dashEnabled = window._dashEnabled;
+
 const createPlayer = (livestreamEnabled) => {
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
@@ -77,7 +79,8 @@ const transformSources = function(video) {
             {
                 src: video.dashSrc,
                 type: 'application/dash+xml',
-                keySystemOptions: keySystemsDash(video),
+                keySystems: dashEnabled ? undefined : keySystemsHls(video),
+                keySystemOptions: dashEnabled ? keySystemsDash(video) : undefined,
             }
         ];
     }
