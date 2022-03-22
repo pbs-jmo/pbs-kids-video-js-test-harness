@@ -77,6 +77,11 @@ const vodUrls = [
         widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
         playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
     },
+    // a non-DRM asset to test with:
+    {
+        URI: 'https://kids.video.cdn.pbs.org/videos/curious-george/b9d55a94-4670-4472-9546-9ed6de0f1ea9/27526/hd-mezzanine-16x9/CGSS_3_M1080-16x9-hls-64-2500k_748.m3u8',
+        mp4: 'https://kids.video.cdn.pbs.org/videos/curious-george/b9d55a94-4670-4472-9546-9ed6de0f1ea9/27526/hd-mezzanine-16x9/CGSS_3_M1080-16x9-mp4-2500k.mp4',
+    },
     /*
     {
         hlsSrc: '',

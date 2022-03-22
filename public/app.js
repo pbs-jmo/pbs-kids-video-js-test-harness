@@ -81,6 +81,23 @@ const transformSources = function(video) {
             }
         ];
     }
+
+    if (video && typeof video === 'object') {
+        const sources = [];
+        if (video.URI) {
+            sources.push({
+                src: video.URI,
+                type: 'application/x-mpegURL'
+            });
+        }
+        if (video.mp4) {
+            sources.push({
+                src: video.mp4,
+                type: 'video/mp4'
+            });
+        }
+        return sources;
+    }
 };
 
 const streamTypeRadioButtons = Array.prototype.slice.call(
