@@ -1,6 +1,6 @@
 var isSafari = videojs.browser.IS_ANY_SAFARI;
 
-var keySystems = (video) => {
+var keySystemsHls = (video) => {
     return {
         // DRM keySystem for Edge
         'com.microsoft.playready': video.playReadyLicenseUrl,
@@ -15,6 +15,27 @@ var keySystems = (video) => {
             licenseUri: video.fairPlayLicenseServerUrl,
         },
     };
+};
+
+var keySystemsDash = function (video) {
+    return [
+        // DRM keySystem for Chrome, Firefox, etc.
+        {
+            name: 'com.widevine.alpha',
+            options: {
+                serverURL: video.widevineLicenseUrl,
+                priority: 1,
+            },
+        },
+        // DRM keySystem for Edge
+        {
+            name: 'com.microsoft.playready',
+            options: {
+                serverURL: video.playReadyLicenseUrl,
+                priority: 2,
+            },
+        },
+    ];
 };
 
 /*
@@ -70,7 +91,8 @@ const vodUrls = [
 
 export {
     isSafari,
-    keySystems,
+    keySystemsHls,
+    keySystemsDash,
     livestreamUrls,
     vodUrls,
 };

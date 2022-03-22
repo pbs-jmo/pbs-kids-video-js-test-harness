@@ -1,6 +1,7 @@
 import {
     isSafari,
-    keySystems,
+    keySystemsHls,
+    keySystemsDash,
     livestreamUrls,
     vodUrls,
 } from './config.js';
@@ -14,6 +15,12 @@ const createPlayer = (livestreamEnabled) => {
         controls: true,
         autoplay: true,
         preload: 'auto',
+        html5: {
+            dash: {
+                // this enables the use of TTML captions AND lets us style them using our existing customization menu.
+                useTTML: true,
+            },
+        }
     });
 
     if (typeof player.eme === 'function') {
@@ -62,7 +69,7 @@ const transformSources = function(video) {
             {
                 src: video.hlsSrc,
                 type: 'application/x-mpegURL',
-                keySystems: keySystems(video),
+                keySystems: keySystemsHls(video),
             }
         ];
     } else if (video.dashSrc) {
@@ -70,7 +77,7 @@ const transformSources = function(video) {
             {
                 src: video.dashSrc,
                 type: 'application/dash+xml',
-                keySystems: keySystems(video),
+                keySystemOptions: keySystemsDash(video),
             }
         ];
     }

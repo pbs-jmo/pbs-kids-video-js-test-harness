@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "lint": "eslint --ext .js ./ --fix",
-    "postinstall": "mkdir -p public/lib && cp node_modules/videojs-contrib-eme/dist/videojs-contrib-eme.min.js public/lib/videojs-contrib-eme.min.js && cp node_modules/video.js/dist/video.min.js public/lib/video.min.js && cp node_modules/video.js/dist/video-js.min.css public/lib/video-js.min.css"
+    "postinstall": "scripts/postinstall.sh"
   },
   "author": "Jeff Moore",
   "license": "ISC",
