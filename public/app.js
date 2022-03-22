@@ -107,11 +107,21 @@ const streamTypeRadioButtons = Array.prototype.slice.call(
     document.querySelectorAll('input[name="stream-type"]')
 );
 
-function ready(fn) {
+function docReady(fn) {
     if (document.readyState != 'loading'){
         fn();
     } else {
         document.addEventListener('DOMContentLoaded', fn);
+    }
+}
+
+function ready(fn) {
+    if (window._dashEnabled) {
+        window.dashScript.addEventListener('load', function() {
+            docReady(fn);
+        });
+    } else {
+        docReady(fn);
     }
 }
   

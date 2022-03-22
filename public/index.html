@@ -11,7 +11,7 @@
         window._dashEnabled = !window.location.search.match(/\bdashoff=true\b/);
 
         if (window._dashEnabled) {
-            const dashScript = document.createElement('script');
+            const dashScript = window.dashScript = document.createElement('script');
             dashScript.src = './lib/videojs-dash.min.js';
             document.head.appendChild(dashScript);
         }
