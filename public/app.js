@@ -1,12 +1,14 @@
-import {
-    isSafari,
-    keySystemsHls,
-    keySystemsDash,
-    livestreamUrls,
-    vodUrls,
-} from './config.js';
+import { drmEnabled, dashEnabled } from './config.js';
+import { getSourceUrl as getSourceUrlDRM } from './drm.js';
+import { getSourceUrl as getSourceUrlNoDRM } from './non-drm.js';
 
-const dashEnabled = window._dashEnabled;
+const getSourceUrl = (...args) => {
+    if (drmEnabled) {
+        return getSourceUrlDRM(...args);
+    } else {
+        return getSourceUrlNoDRM(...args);
+    }
+};
 
 function bindPlayerEvents(player) {
     var isFullscreen = false;
@@ -23,26 +25,27 @@ const createPlayer = (livestreamEnabled) => {
 
     videojs.log.level('debug');
 
-    const player = window._player = videojs('video-element',  {
+    const options = {
         controls: true,
         autoplay: true,
         preload: 'auto',
-        html5: {
-            dash: {
-                // this enables the use of TTML captions AND lets us style them using our existing customization menu.
-                useTTML: true,
-            },
-        }
-    });
+        html5: {},
+    };
+
+    if (dashEnabled) {
+        options.html5.dash = {
+            // this enables the use of TTML captions AND lets us style them using our existing customization menu.
+            useTTML: true,
+        };
+    }
+
+    const player = window._player = videojs('video-element',  options);
 
     bindPlayerEvents(player);
 
-    if (typeof player.eme === 'function') {
+    if (typeof player.eme === 'function' && drmEnabled) {
         player.eme();
     }
-
-    const getSourceUrl = (livestream, index = 0) =>
-        transformSources(livestream ? livestreamUrls[index] : vodUrls[index]);
 
     const setSourceUrl = (livestream, index = 0) => {
         const sources = getSourceUrl(livestream, index);
@@ -51,7 +54,7 @@ const createPlayer = (livestreamEnabled) => {
             console.log('player.src getting set to:', JSON.stringify(sources[0], null, 2));
             player.src(sources[0]);
             currentSrcEle.value = url;
-            
+
             prevBtn.disabled = !getSourceUrl(livestream, index - 1);
             nextBtn.disabled = !getSourceUrl(livestream, index + 1);
         }
@@ -74,47 +77,6 @@ const createPlayer = (livestreamEnabled) => {
     setSourceUrl(livestreamEnabled);
 };
 
-const transformSources = function(video) {
-    if (!video) return;
-
-    if (isSafari && video.hlsSrc) {
-        // Safari uses an HLS stream
-        return [
-            {
-                src: video.hlsSrc,
-                type: 'application/x-mpegURL',
-                keySystems: keySystemsHls(video),
-            }
-        ];
-    } else if (video.dashSrc) {
-        return [
-            {
-                src: video.dashSrc,
-                type: 'application/dash+xml',
-                keySystems: dashEnabled ? undefined : keySystemsHls(video),
-                keySystemOptions: dashEnabled ? keySystemsDash(video) : undefined,
-            }
-        ];
-    }
-
-    if (video && typeof video === 'object') {
-        const sources = [];
-        if (video.URI) {
-            sources.push({
-                src: video.URI,
-                type: 'application/x-mpegURL'
-            });
-        }
-        if (video.mp4) {
-            sources.push({
-                src: video.mp4,
-                type: 'video/mp4'
-            });
-        }
-        return sources;
-    }
-};
-
 const streamTypeRadioButtons = Array.prototype.slice.call(
     document.querySelectorAll('input[name="stream-type"]')
 );
@@ -127,16 +89,30 @@ function docReady(fn) {
     }
 }
 
-function ready(fn) {
-    if (window._dashEnabled) {
-        window.dashScript.addEventListener('load', function() {
-            docReady(fn);
-        });
-    } else {
-        docReady(fn);
+async function ready(fn) {
+    const deps = [];
+
+    if (drmEnabled) {
+        deps.push('./lib/videojs-contrib-eme.min.js');
+
+        if (dashEnabled) {
+            deps.push('./lib/videojs-dash.min.js');
+        }
     }
+
+    await Promise.all(deps.map(loadScript));
+
+    docReady(fn);
 }
-  
+
+const loadScript = (url) => new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = url;
+    document.head.appendChild(script);
+    script.addEventListener('load', resolve);
+    script.addEventListener('error', reject);
+});
+
 ready(() => {
     streamTypeRadioButtons.forEach((inputEle) => {
         // init player as stream type already selected
@@ -152,4 +128,17 @@ ready(() => {
             );
         });
     });
+
+    printConfig();
 });
+
+const printConfig = () => {
+    document.querySelector('#harness-config-output').value =
+        JSON.stringify(
+            {
+                drmEnabled,
+                dashEnabled,
+            },
+            null, 2
+        );
+};
