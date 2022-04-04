@@ -7,7 +7,7 @@ input:not([type=radio]) {
     width: 100%;
     box-sizing: border-box;
 }
-#video-element {
+#video-element:not(.is-fullscreen) {
     max-width: 50vw;
     max-height: 50vh;
 }

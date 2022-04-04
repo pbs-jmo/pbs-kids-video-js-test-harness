@@ -8,6 +8,16 @@ import {
 
 const dashEnabled = window._dashEnabled;
 
+function bindPlayerEvents(player) {
+    var isFullscreen = false;
+    var playerElement = player.el();
+
+    player.on('fullscreenchange', function () {
+        isFullscreen = !isFullscreen;
+        playerElement.classList.toggle('is-fullscreen', isFullscreen);
+    });
+}
+
 const createPlayer = (livestreamEnabled) => {
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
@@ -24,6 +34,8 @@ const createPlayer = (livestreamEnabled) => {
             },
         }
     });
+
+    bindPlayerEvents(player);
 
     if (typeof player.eme === 'function') {
         player.eme();
