@@ -1,4 +1,4 @@
-import { drmEnabled, dashEnabled } from './config.js';
+import { drmEnabled, dashEnabled, isSafari } from './config.js';
 import { getSourceUrl as getSourceUrlDRM } from './drm.js';
 import { getSourceUrl as getSourceUrlNoDRM } from './non-drm.js';
 
@@ -31,6 +31,15 @@ const createPlayer = (livestreamEnabled) => {
         preload: 'auto',
         html5: {},
     };
+
+    if (window._player) {
+        window._player.dispose();
+    }
+
+    var playerElement = document.createElement('video');
+    playerElement.setAttribute('id', 'video-element');
+    playerElement.classList.add('video-js');
+    document.body.prepend(playerElement);
 
     if (dashEnabled) {
         options.html5.dash = {
@@ -93,6 +102,10 @@ async function ready(fn) {
     const deps = [];
 
     if (drmEnabled) {
+        if (isSafari) {
+            deps.push('./lib/videojs-contrib-hls.min.js');
+        }
+
         deps.push('./lib/videojs-contrib-eme.min.js');
 
         if (dashEnabled) {

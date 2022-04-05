@@ -1,7 +1,5 @@
-import { dashEnabled } from './config.js';
+import { dashEnabled, isSafari } from './config.js';
 import { vodUrls as nonDrmVodUrls } from './non-drm.js';
-
-var isSafari = videojs.browser.IS_ANY_SAFARI;
 
 var keySystemsHls = (video) => {
     return {
@@ -148,5 +146,6 @@ const transformSources = function(video) {
 const getSourceUrl = (livestream, index = 0) => transformSources(livestream ? livestreamUrls[index] : vodUrls[index]);
 
 export {
+    isSafari,
     getSourceUrl,
 };
