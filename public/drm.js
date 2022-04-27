@@ -60,12 +60,12 @@ https://pbs.slack.com/archives/C01MYNDL9K5/p1628680921079800
 
 const livestreamUrls = [
     {
-        hlsSrc: 'https://livestream-staging.pbskids.org/out/v1/587e9392056c4a5c8be472499459ebe2/est-hls-drm2.m3u8',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/est-hls2',
+        hlsSrc: 'https://urs.pbs.org/redirect/2ed14c04a8c84ef595c72f5262591e92/',
+        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/est-hls',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://livestream-staging.pbskids.org/out/v1/a8637660f49049c69cccd1d8266905a6/est-dash-drm2.mpd',
-        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/est-dash2',
-        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/est-dash2',
+        dashSrc: 'https://urs.pbs.org/redirect/ef0dca5678d04af9b5829f01a0db34b7/',
+        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/est-dash',
+        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/est-dash',
     },
 ];
 
