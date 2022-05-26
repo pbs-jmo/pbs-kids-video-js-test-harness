@@ -80,11 +80,12 @@ const vodUrls = [
         playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
     },
     // Curious George - George Feels Sheepish
+    // source data: https://content.services.pbskids.org/v2/kidsios/videos/2141603345/
     {
-        hlsSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/eeb2331a-8aee-47c2-ad1b-bdc03a464f88/2000277314/hd-16x9-mezzanine-1080p/cuge507_4_m1080-hls-16x9-720p.m3u8',
+        hlsSrc: 'https://urs.pbs.org/redirect/2c24c4163e924d6d8987871674a3ae5b/',
         fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://kids.video.cdn.pbs.org/videos/curious-george/eeb2331a-8aee-47c2-ad1b-bdc03a464f88/2000277314/hd-16x9-mezzanine-1080p/cuge507_4_m1080-dash-16x9-720p.mpd',
+        dashSrc: 'https://urs.pbs.org/redirect/0c358704549c43708f9b39acf6e54ca9/',
         widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
         playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
     },

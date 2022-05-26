@@ -6,8 +6,8 @@ const livestreamUrls = [
 
 const vodUrls = [
     {
-        URI: 'https://kids.video.cdn.pbs.org/videos/curious-george/b9d55a94-4670-4472-9546-9ed6de0f1ea9/27526/hd-mezzanine-16x9/CGSS_3_M1080-16x9-hls-64-2500k_748.m3u8',
-        mp4: 'https://kids.video.cdn.pbs.org/videos/curious-george/b9d55a94-4670-4472-9546-9ed6de0f1ea9/27526/hd-mezzanine-16x9/CGSS_3_M1080-16x9-mp4-2500k.mp4',
+        // Arthur - Library Song
+        URI: 'https://urs.pbs.org/redirect/6920a3590a78403b99795dc794bffec9/',
     },
 ];
 
