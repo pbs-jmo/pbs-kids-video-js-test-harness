@@ -23,7 +23,7 @@ function bindPlayerEvents(player) {
 const createPlayer = (livestreamEnabled) => {
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
-    videojs.log.level('debug');
+    // videojs.log.level('debug');
 
     const options = {
         controls: true,
@@ -38,8 +38,9 @@ const createPlayer = (livestreamEnabled) => {
 
     var playerElement = document.createElement('video');
     playerElement.setAttribute('id', 'video-element');
-    playerElement.classList.add('video-js');
-    document.body.prepend(playerElement);
+    playerElement.classList.add('video-js', 'video-element');
+    var playerWrapper = document.querySelector('.player-wrapper');
+    playerWrapper.prepend(playerElement);
 
     if (dashEnabled) {
         options.html5.dash = {

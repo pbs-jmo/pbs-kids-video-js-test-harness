@@ -1,4 +1,4 @@
-import { dashEnabled, isSafari } from './config.js';
+import { dashEnabled, drmEnabled, isSafari } from './config.js';
 import { vodUrls as nonDrmVodUrls } from './non-drm.js';
 
 var keySystemsHls = (video) => {
@@ -69,7 +69,7 @@ const livestreamUrls = [
     },
 ];
 
-const vodUrls = [
+const vodUrls = drmEnabled ? [
     // Sci Girls - Bee Haven
     {
         hlsSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-hls-16x9-720p.m3u8',
@@ -101,7 +101,7 @@ const vodUrls = [
         playReadyLicenseUrl: '',
     },
     */
-];
+] : nonDrmVodUrls;
 
 const transformSources = function(video) {
     if (!video) return;
