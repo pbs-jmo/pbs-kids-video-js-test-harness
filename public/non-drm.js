@@ -10,8 +10,8 @@ const vodUrls = [
         URI: 'https://urs.pbs.org/redirect/6920a3590a78403b99795dc794bffec9/',
     },
     {
-        // full episode of daniel tiger in mp4 format
-        mp4: 'https://urs.pbs.org/redirect/690288d36ce8498ead1769490d65115f/',
+        // full episode of daniel tiger in mp4 format, sourced from https://content.services.pbs.org/v2/kidspbsorg/videos/2365508871/
+        mp4: 'https://urs.pbs.org/redirect/3fd6949ffc034c1293c677510bc6c5e1/',
     },
     {
         // full episode of daniel tiger

@@ -20,6 +20,22 @@ function bindPlayerEvents(player) {
     });
 }
 
+const preCache = async (urls) => {
+    const serviceWorker = await navigator.serviceWorker.ready;
+
+    serviceWorker.active.postMessage({
+        cacheViaAddAll: urls,
+    });
+};
+
+navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data.eventType === 'cacheComplete' && event.data.source === 'cache.addAll') {
+        alert(`${event.data.url} was downloaded in ${(event.data.duration / 1000).toFixed(2)} seconds!`);
+    } else {
+        console.debug('A message from the Service Worker!', event.data);
+    }
+});
+
 const createPlayer = (livestreamEnabled) => {
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
@@ -67,6 +83,21 @@ const createPlayer = (livestreamEnabled) => {
 
             prevBtn.disabled = !getSourceUrl(livestream, index - 1);
             nextBtn.disabled = !getSourceUrl(livestream, index + 1);
+        }
+        const nextUrl = getSourceUrl(livestream, index + 1)?.[0]?.src;
+        const prevUrl = getSourceUrl(livestream, index - 1)?.[0]?.src;
+        const precacheUrls = [];
+
+        if (nextUrl) {
+            precacheUrls.push(nextUrl);
+        }
+
+        if (prevUrl) {
+            precacheUrls.push(prevUrl);
+        }
+
+        if (precacheUrls.length) {
+            preCache(precacheUrls);
         }
     };
 
