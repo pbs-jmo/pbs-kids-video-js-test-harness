@@ -1,6 +1,6 @@
 import { drmEnabled, dashEnabled, isSafari } from './config.js';
 import { getSourceUrl as getSourceUrlDRM } from './drm.js';
-import { getSourceUrl as getSourceUrlNoDRM } from './non-drm.js';
+import { getSourceUrl as getSourceUrlNoDRM, isMp4 as isUrlMp4 } from './non-drm.js';
 
 const getSourceUrl = (...args) => {
     if (drmEnabled) {
@@ -20,17 +20,47 @@ function bindPlayerEvents(player) {
     });
 }
 
+const awaitPreCaching = async (url) => {
+    return new Promise((resolve) => {
+        const check = (event) => {
+            if (event.data.eventType === 'cacheComplete' && event.data.url === url) {
+                resolve(event.data);
+                navigator.serviceWorker.removeEventListener('message', check);
+            }
+        };
+        navigator.serviceWorker.addEventListener('message', check);
+    });
+};
+
+const checkIsCached = async (url) => {
+    const serviceWorker = await navigator.serviceWorker.ready;
+
+    serviceWorker.active.postMessage({
+        checkIsCached: url,
+    });
+
+    return new Promise((resolve) => {
+        navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data.eventType === 'checkIsCachedComplete' && event.data.url === url) {
+                resolve(event.data.isCached);
+            }
+        });
+    });
+};
+
 const preCache = async (urls) => {
     const serviceWorker = await navigator.serviceWorker.ready;
 
     serviceWorker.active.postMessage({
         cacheViaAddAll: urls,
     });
+
+    return Promise.all(urls.map(awaitPreCaching));
 };
 
 navigator.serviceWorker.addEventListener('message', event => {
     if (event.data.eventType === 'cacheComplete' && event.data.source === 'cache.addAll') {
-        alert(`${event.data.url} was downloaded in ${(event.data.duration / 1000).toFixed(2)} seconds!`);
+        console.debug(`${event.data.url} was downloaded in ${(event.data.duration / 1000).toFixed(2)} seconds!`);
     } else {
         console.debug('A message from the Service Worker!', event.data);
     }
@@ -73,7 +103,30 @@ const createPlayer = (livestreamEnabled) => {
         player.eme();
     }
 
-    const setSourceUrl = (livestream, index = 0) => {
+    const downloadButton = document.querySelector('#download-video');
+
+    const setDownloadButtonState = async(url) => {
+        const isMp4 = isUrlMp4(url);
+        const isDownloaded = isMp4 && await checkIsCached(url);
+        downloadButton.innerHTML = isDownloaded ? 'Already Downloaded!' : downloadButton.getAttribute('data-original-text');
+        downloadButton.disabled = !isMp4 || isDownloaded;
+    };
+
+    downloadButton.addEventListener('click', async (e) => {
+        const url = getSourceUrl(livestreamEnabled, currentUrlIndex)?.[0]?.src;
+
+        if (url) {
+            e.target.disabled = true;
+            await preCache(
+                [
+                    url,
+                ],
+            );
+            setDownloadButtonState(url);
+        }
+    });
+
+    const setSourceUrl = async (livestream, index = 0) => {
         const sources = getSourceUrl(livestream, index);
         const url = sources && sources[0] ? sources[0].src : null;
         if (url) {
@@ -83,21 +136,8 @@ const createPlayer = (livestreamEnabled) => {
 
             prevBtn.disabled = !getSourceUrl(livestream, index - 1);
             nextBtn.disabled = !getSourceUrl(livestream, index + 1);
-        }
-        const nextUrl = getSourceUrl(livestream, index + 1)?.[0]?.src;
-        const prevUrl = getSourceUrl(livestream, index - 1)?.[0]?.src;
-        const precacheUrls = [];
 
-        if (nextUrl) {
-            precacheUrls.push(nextUrl);
-        }
-
-        if (prevUrl) {
-            precacheUrls.push(prevUrl);
-        }
-
-        if (precacheUrls.length) {
-            preCache(precacheUrls);
+            setDownloadButtonState(url);
         }
     };
 

@@ -214,6 +214,28 @@ const getStorageAvailableInBytes = async () => {
     return storageEstimate.quota - storageEstimate.usage;
 };
 
+const allRequests = [];
+
+const addToRequestRegistry = (url) => {
+    if (!findInRequestRegistry(url)) {
+        allRequests.push({
+            url,
+            resolved: false,
+        });
+    }
+};
+
+const findInRequestRegistry = (url) => {
+    return allRequests.find((req) => req.url === url && !req.resolved);
+};
+
+const resolveFromRequestRegistry = (url) => {
+    const found = findInRequestRegistry(url);
+    if (found) {
+        found.resolved = true;
+    }
+};
+
 const handleGet = async (event) => {
     const url = event?.request?.url;
     const startTime = Date.now();
@@ -228,9 +250,13 @@ const handleGet = async (event) => {
             return cached;
         }
 
+        addToRequestRegistry(url);
+
         const response = await fetch(url);
         if (response.ok) {
             logger.debug(`Caching completed GET request with Cache API: ${url}`);
+            resolveFromRequestRegistry(url);
+
             cache.put(event.request, response.clone()).then(async () => {
                 if (event.clientId) {
                     // Get the client.
@@ -278,9 +304,15 @@ self.addEventListener('fetch', (event) => {
     }
 });
 
-const allApiCached = [];
-
 const uniqArr = (items) => [ ...new Set(items) ];
+
+const messageClients = (data) => {
+    self.clients.matchAll().then(function (clients){
+        clients.forEach((client) => {
+            client.postMessage(data);
+        });
+    });
+};
 
 self.addEventListener('message', (event) => {
     logger.debug('SW message received', JSON.stringify(event.data, null, 2));
@@ -289,25 +321,35 @@ self.addEventListener('message', (event) => {
             caches.open('pbs-kids-video-js-test-harness').then((cache) => {
                 const startTime = Date.now();
                 const urlsToCache = uniqArr(event.data.cacheViaAddAll)
-                    .filter(item => allApiCached.indexOf(item) === -1);
+                    .filter((url) => !findInRequestRegistry(url));
 
-                allApiCached.push(...urlsToCache);
+                urlsToCache.forEach((url) => addToRequestRegistry(url));
 
                 return cache.addAll(urlsToCache).then(() => {
-                    self.clients.matchAll().then(function (clients){
-                        clients.forEach(function(client){
-                            urlsToCache.forEach(url => {
-                                client.postMessage({
-                                    eventType: 'cacheComplete',
-                                    url,
-                                    source: 'cache.addAll',
-                                    duration: Date.now() - startTime,
-                                });
-                            });
+                    urlsToCache.forEach(url => {
+                        resolveFromRequestRegistry(url);
+
+                        messageClients({
+                            eventType: 'cacheComplete',
+                            url,
+                            source: 'cache.addAll',
+                            duration: Date.now() - startTime,
                         });
                     });
                 });
             }),
+        );
+    } else if (event.data.checkIsCached) {
+        event.waitUntil(
+            caches.open('pbs-kids-video-js-test-harness').then(async (cache) => {
+                const isCached = await cache.match(event.data.checkIsCached);
+
+                messageClients({
+                    eventType: 'checkIsCachedComplete',
+                    url: event.data.checkIsCached,
+                    isCached: !!isCached,
+                });
+            })
         );
     }
 });
