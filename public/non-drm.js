@@ -13,11 +13,11 @@ const vodUrls = [
         // full episode of daniel tiger in mp4 format
         mp4: 'https://urs.pbs.org/redirect/690288d36ce8498ead1769490d65115f/',
     },
-    {
-        // full episode of daniel tiger
-        URI: 'https://urs.pbs.org/redirect/3cfa01d78f07484f83dc73860c37de1d/',
-    },
 ];
+
+const isMp4 = (url) => {
+    return !!vodUrls.find((item) => item.mp4 === url);
+};
 
 const transformSources = function(video) {
     if (video && typeof video === 'object') {
@@ -43,4 +43,5 @@ const getSourceUrl = (livestream, index = 0) => transformSources(livestream ? li
 export {
     getSourceUrl,
     vodUrls,
+    isMp4,
 };

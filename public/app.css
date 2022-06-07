@@ -18,6 +18,14 @@ input:not([type=radio]) {
     aspect-ratio: 16 / 9;
     margin: 0 auto;
 }
+.video-js .vjs-big-play-button {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.external-controls {
+    text-align: center;
+}
 
 #harness-config-output {
     font-size: 9px;
