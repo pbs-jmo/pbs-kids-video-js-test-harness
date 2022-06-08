@@ -1,6 +1,6 @@
 import express from 'express';
 
-const port = 3000;
+const port = 3047;
 const rootUrl = `http://localhost:${port}`;
 const title = 'PBS KIDS Video.js Test Harness';
 
