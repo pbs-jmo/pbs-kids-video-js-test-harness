@@ -6,6 +6,10 @@ const livestreamUrls = [
 
 const vodUrls = [
     {
+        // Alma with multiple embedded caption tracks
+        URI: 'https://urs.pbs.org/redirect/3d36a2e225264904baa1b8079574be47/'
+    },
+    {
         // Arthur - Library Song
         URI: 'https://urs.pbs.org/redirect/6920a3590a78403b99795dc794bffec9/',
     },
