@@ -9,6 +9,14 @@ const vodUrls = [
         // Alma with multiple embedded caption tracks
         URI: 'https://urs.pbs.org/redirect/4700fc9ce3654354b6102d87ae6cee46/'
     },
+    // Sesame Street full episode
+    {
+        URI: 'https://urs.pbs.org/redirect/c2e2c6f5cf894fcab7b456f7d93b6592/',
+    },
+    // Daniel Tiger full episode
+    {
+        URI: 'https://urs.pbs.org/redirect/2c4144a7d2b544e3864e79f3ac77d901/',
+    },
     {
         // Arthur - Library Song
         URI: 'https://urs.pbs.org/redirect/8dc42c59d89d4455ad76b7637129b634/',
