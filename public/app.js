@@ -169,10 +169,6 @@ async function ready(fn) {
     const deps = [];
 
     if (drmEnabled) {
-        if (isSafari) {
-            deps.push('./lib/videojs-contrib-hls.min.js');
-        }
-
         deps.push('./lib/videojs-contrib-eme.min.js');
 
         if (dashEnabled) {
