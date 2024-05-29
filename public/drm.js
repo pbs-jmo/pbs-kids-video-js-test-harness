@@ -100,8 +100,8 @@ const vodUrls = drmEnabled ? [
         widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
         playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
     },
-    // a non-DRM asset to test with:
-    nonDrmVodUrls[0]
+    // non-DRM assets to test with:
+    ...nonDrmVodUrls,
     /*
     {
         hlsSrc: '',

@@ -7,11 +7,11 @@ const livestreamUrls = [
 const vodUrls = [
     {
         // Alma with multiple embedded caption tracks
-        URI: 'https://urs.pbs.org/redirect/3d36a2e225264904baa1b8079574be47/'
+        URI: 'https://urs.pbs.org/redirect/4700fc9ce3654354b6102d87ae6cee46/'
     },
     {
         // Arthur - Library Song
-        URI: 'https://urs.pbs.org/redirect/6920a3590a78403b99795dc794bffec9/',
+        URI: 'https://urs.pbs.org/redirect/8dc42c59d89d4455ad76b7637129b634/',
     },
     {
         // full episode of daniel tiger in mp4 format, sourced from https://content.services.pbs.org/v2/kidspbsorg/videos/2365508871/
