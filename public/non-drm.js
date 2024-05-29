@@ -21,10 +21,6 @@ const vodUrls = [
         // Arthur - Library Song
         URI: 'https://urs.pbs.org/redirect/8dc42c59d89d4455ad76b7637129b634/',
     },
-    {
-        // full episode of daniel tiger in mp4 format, sourced from https://content.services.pbs.org/v2/kidspbsorg/videos/2365508871/
-        mp4: 'https://urs.pbs.org/redirect/3fd6949ffc034c1293c677510bc6c5e1/',
-    },
 ];
 
 const isMp4 = (url) => {
