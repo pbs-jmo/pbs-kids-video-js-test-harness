@@ -1,4 +1,5 @@
 import express from 'express';
+import request from 'request';
 
 const port = 3047;
 const rootUrl = `http://localhost:${port}`;
@@ -22,7 +23,12 @@ const init = async () => {
         console.log('\nFailed to start local express server. It looks like you may already have a server running?');
         return;
     }
-  
+
+    // Get around CORS restrictions
+    app.get('/proxy', function(req,res) {
+        request(req.query.url).pipe(res);
+    });
+
     app.use(express.static('public'));
 
     app.listen(port, () => {

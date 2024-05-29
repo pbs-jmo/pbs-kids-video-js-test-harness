@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf public/lib || exit
 mkdir -p public/lib || exit
 
 cp node_modules/videojs-contrib-eme/dist/videojs-contrib-eme.min.js   public/lib/videojs-contrib-eme.min.js || exit

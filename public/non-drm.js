@@ -42,7 +42,7 @@ const transformSources = function(video) {
     }
 };
 
-const getSourceUrl = (livestream, index = 0) => transformSources(livestream ? livestreamUrls[index] : vodUrls[index]);
+const getSourceUrl = async (livestream, index = 0) => transformSources(livestream ? livestreamUrls[index] : vodUrls[index]);
 
 export {
     getSourceUrl,

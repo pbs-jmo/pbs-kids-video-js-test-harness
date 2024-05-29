@@ -58,15 +58,26 @@ More URLs:
 https://pbs.slack.com/archives/C01MYNDL9K5/p1628680921079800
 */
 
+/*
 const livestreamUrls = [
     {
         hlsSrc: 'https://urs.pbs.org/redirect/2ed14c04a8c84ef595c72f5262591e92/',
         fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/est-hls',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://urs.pbs.org/redirect/ef0dca5678d04af9b5829f01a0db34b7/',
+        // WETA
+        dashSrc: 'https://urs-anonymous-detect.pbs.org/redirect/ef0dca5678d04af9b5829f01a0db34b7/',
         widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/est-dash',
+        // // KOTH
+        // dashSrc: 'https://urs-anonymous-detect.pbs.org/redirect/56acd22a1a61433eb97d2727b55ae4b5/',
+        // widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/est-dash2',
         playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/est-dash',
     },
+];
+*/
+
+const livestreamCallsigns = [
+    'WETA',
+    'KOTH',
 ];
 
 const vodUrls = drmEnabled ? [
@@ -82,10 +93,10 @@ const vodUrls = drmEnabled ? [
     // Curious George - George Feels Sheepish
     // source data: https://content.services.pbskids.org/v2/kidsios/videos/2141603345/
     {
-        hlsSrc: 'https://urs.pbs.org/redirect/2c24c4163e924d6d8987871674a3ae5b/',
+        hlsSrc: 'https://urs-anonymous-detect.pbs.org/redirect/004f62ac62204454a1c6d477c19ae4d9/',
         fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
         fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://urs.pbs.org/redirect/0c358704549c43708f9b39acf6e54ca9/',
+        dashSrc: 'https://urs-anonymous-detect.pbs.org/redirect/723f2bdef5fc4274a01e040b2a515e5b/',
         widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
         playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
     },
@@ -103,13 +114,14 @@ const vodUrls = drmEnabled ? [
     */
 ] : nonDrmVodUrls;
 
-const transformSources = function(video) {
+const transformSources = function(video, contentDescription = '') {
     if (!video) return;
 
     if (isSafari && video.hlsSrc) {
         // Safari uses an HLS stream
         return [
             {
+                contentDescription,
                 src: video.hlsSrc,
                 type: 'application/x-mpegURL',
                 keySystems: keySystemsHls(video),
@@ -118,6 +130,7 @@ const transformSources = function(video) {
     } else if (video.dashSrc) {
         return [
             {
+                contentDescription,
                 src: video.dashSrc,
                 type: 'application/dash+xml',
                 keySystems: dashEnabled ? undefined : keySystemsHls(video),
@@ -130,12 +143,14 @@ const transformSources = function(video) {
         const sources = [];
         if (video.URI) {
             sources.push({
+                contentDescription,
                 src: video.URI,
                 type: 'application/x-mpegURL'
             });
         }
         if (video.mp4) {
             sources.push({
+                contentDescription,
                 src: video.mp4,
                 type: 'video/mp4'
             });
@@ -144,7 +159,28 @@ const transformSources = function(video) {
     }
 };
 
-const getSourceUrl = (livestream, index = 0) => transformSources(livestream ? livestreamUrls[index] : vodUrls[index]);
+const getSourceUrl = async (livestream, index = 0) => {
+    if (livestream) {
+        const callsign = livestreamCallsigns[index];
+        if (!callsign) {
+            return;
+        }
+        const response = await fetch('/proxy?url=https://pbskids.org/api/puma/video/livestream/' + callsign).then((response) => response.json());
+
+        const fromPumaApi = {
+            hlsSrc: response.drm_hls_url,
+            fairPlayLicenseServerUrl: response.fairplay_license,
+            fairPlayCertificateServerUrl: response.fairplay_certificate,
+            dashSrc: response.drm_dash_url,
+            widevineLicenseUrl: response.widevine_license,
+            playReadyLicenseUrl: response.playready_license,
+        };
+
+        return transformSources(fromPumaApi, callsign + ' Livestream');
+    }
+
+    return transformSources(vodUrls[index]);
+};
 
 export {
     isSafari,

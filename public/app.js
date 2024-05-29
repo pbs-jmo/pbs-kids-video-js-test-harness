@@ -2,7 +2,7 @@ import { drmEnabled, dashEnabled, isSafari } from './config.js';
 import { getSourceUrl as getSourceUrlDRM } from './drm.js';
 import { getSourceUrl as getSourceUrlNoDRM, isMp4 as isUrlMp4 } from './non-drm.js';
 
-const getSourceUrl = (...args) => {
+const getSourceUrl = async (...args) => {
     if (drmEnabled) {
         return getSourceUrlDRM(...args);
     } else {
@@ -69,7 +69,7 @@ navigator.serviceWorker.addEventListener('message', event => {
 const createPlayer = (livestreamEnabled) => {
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
-    // videojs.log.level('debug');
+    videojs.log.level('debug');
 
     const options = {
         controls: true,
@@ -87,13 +87,6 @@ const createPlayer = (livestreamEnabled) => {
     playerElement.classList.add('video-js', 'video-element');
     var playerWrapper = document.querySelector('.player-wrapper');
     playerWrapper.prepend(playerElement);
-
-    if (dashEnabled) {
-        options.html5.dash = {
-            // this enables the use of TTML captions AND lets us style them using our existing customization menu.
-            useTTML: true,
-        };
-    }
 
     const player = window._player = videojs('video-element',  options);
 
@@ -113,7 +106,7 @@ const createPlayer = (livestreamEnabled) => {
     };
 
     downloadButton.addEventListener('click', async (e) => {
-        const url = getSourceUrl(livestreamEnabled, currentUrlIndex)?.[0]?.src;
+        const url = await getSourceUrl(livestreamEnabled, currentUrlIndex)?.[0]?.src;
 
         if (url) {
             e.target.disabled = true;
@@ -127,15 +120,16 @@ const createPlayer = (livestreamEnabled) => {
     });
 
     const setSourceUrl = async (livestream, index = 0) => {
-        const sources = getSourceUrl(livestream, index);
+        const sources = await getSourceUrl(livestream, index);
         const url = sources && sources[0] ? sources[0].src : null;
         if (url) {
             console.log('player.src getting set to:', JSON.stringify(sources[0], null, 2));
             player.src(sources[0]);
             currentSrcEle.value = url;
+            currentSrcDesc.value = sources[0].contentDescription || sources[0].URI || sources[0].mp4 || sources[0].src;
 
-            prevBtn.disabled = !getSourceUrl(livestream, index - 1);
-            nextBtn.disabled = !getSourceUrl(livestream, index + 1);
+            prevBtn.disabled = !(await getSourceUrl(livestream, index - 1));
+            nextBtn.disabled = !(await getSourceUrl(livestream, index + 1));
 
             setDownloadButtonState(url);
         }
@@ -144,6 +138,7 @@ const createPlayer = (livestreamEnabled) => {
     let currentUrlIndex = 0;
 
     const currentSrcEle = document.querySelector('#current-source-url');
+    const currentSrcDesc = document.querySelector('#current-source-description');
     const nextBtn = document.querySelector('#next-source-url');
     const prevBtn = document.querySelector('#previous-source-url');
 

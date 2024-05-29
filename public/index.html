@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <link type="text/css" rel="stylesheet" href="./lib/video-js.min.css">
     <link type="text/css" rel="stylesheet" href="./app.css">
-    <script src="./sw-init.js"></script>
+    <!-- <script src="./sw-init.js"></script> -->
     <script src="./lib/video.min.js"></script>
 </head>
 <body>
@@ -26,6 +26,9 @@
     <input type="radio" name="stream-type" id="stream-type-vod" value="vod" checked /> <label for="stream-type-vod">VOD</label>
     <input type="radio" name="stream-type" id="stream-type-livestream" value="livestream" /> <label for="stream-type-livestream">Livestream</label>
 </p>
+
+<h4>Current Video Source Description:</h4>
+<p><input id="current-source-description"></input></p>
 
 <h4>Current Video Source URL:</h4>
 <p><input id="current-source-url"></input></p>

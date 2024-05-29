@@ -1,0 +1,6 @@
+{
+  "search.exclude": {
+    "public/lib": true,
+    "package-lock.json": true,
+  }
+}
