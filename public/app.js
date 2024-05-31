@@ -1,4 +1,4 @@
-import { drmEnabled, dashEnabled, isSafari } from './config.js';
+import { drmEnabled, dashEnabled } from './config.js';
 import { getSourceUrl as getSourceUrlDRM } from './drm.js';
 import { getSourceUrl as getSourceUrlNoDRM, isMp4 as isUrlMp4 } from './non-drm.js';
 
@@ -88,6 +88,8 @@ const createPlayer = (livestreamEnabled) => {
     var playerWrapper = document.querySelector('.player-wrapper');
     playerWrapper.prepend(playerElement);
 
+    console.debug('video.js options', JSON.stringify(options, null, 2));
+
     const player = window._player = videojs('video-element',  options);
 
     bindPlayerEvents(player);
@@ -123,10 +125,11 @@ const createPlayer = (livestreamEnabled) => {
         const sources = await getSourceUrl(livestream, index);
         const url = sources && sources[0] ? sources[0].src : null;
         if (url) {
-            console.log('player.src getting set to:', JSON.stringify(sources[0], null, 2));
+            console.debug('video.js player.src getting set to:', JSON.stringify(sources, null, 2));
             player.src(sources[0]);
             currentSrcEle.value = url;
             currentSrcDesc.value = sources[0].contentDescription || sources[0].URI || sources[0].mp4 || sources[0].src;
+            currentSrcDesc.value = (sources[0].keySystemOptions ? '(DRM) ' : '(non-DRM) ') + currentSrcDesc.value;
 
             prevBtn.disabled = !(await getSourceUrl(livestream, index - 1));
             nextBtn.disabled = !(await getSourceUrl(livestream, index + 1));

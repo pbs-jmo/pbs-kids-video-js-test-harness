@@ -121,20 +121,20 @@ const transformSources = function(video, contentDescription = '') {
         // Safari uses an HLS stream
         return [
             {
-                contentDescription,
                 src: video.hlsSrc,
                 type: 'application/x-mpegURL',
                 keySystems: keySystemsHls(video),
+                contentDescription,
             }
         ];
     } else if (video.dashSrc) {
         return [
             {
-                contentDescription,
                 src: video.dashSrc,
                 type: 'application/dash+xml',
                 keySystems: dashEnabled ? undefined : keySystemsHls(video),
                 keySystemOptions: dashEnabled ? keySystemsDash(video) : undefined,
+                contentDescription,
             }
         ];
     }
@@ -143,16 +143,16 @@ const transformSources = function(video, contentDescription = '') {
         const sources = [];
         if (video.URI) {
             sources.push({
-                contentDescription,
                 src: video.URI,
-                type: 'application/x-mpegURL'
+                type: 'application/x-mpegURL',
+                contentDescription,
             });
         }
         if (video.mp4) {
             sources.push({
-                contentDescription,
                 src: video.mp4,
-                type: 'video/mp4'
+                type: 'video/mp4',
+                contentDescription,
             });
         }
         return sources;
