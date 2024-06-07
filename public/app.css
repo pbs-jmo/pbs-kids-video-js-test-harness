@@ -8,6 +8,7 @@ input:not([type=radio]) {
     box-sizing: border-box;
 }
 .player-wrapper  {
+    display: flex;
     background: rgba(0,0,0,.8);
 }
 .video-element:not(.is-fullscreen) {
