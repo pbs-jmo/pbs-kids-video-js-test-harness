@@ -17,6 +17,6 @@
     "request": "^2.88.2",
     "video.js": "^8.12.0",
     "videojs-contrib-dash": "^5.1.1",
-    "videojs-contrib-eme": "^3.11.2"
+    "videojs-contrib-eme": "^5.4.0"
   }
 }
