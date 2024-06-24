@@ -186,7 +186,12 @@ const getSourceUrl = async (livestream, index = 0) => {
         if (!callsign) {
             return;
         }
-        const response = await fetch('/proxy?url=https://pbskids.org/api/puma/video/livestream/' + callsign).then((response) => response.json());
+
+        const actualApiUrl = 'https://pbskids.org/api/puma/video/livestream/' + callsign;
+        const deployedToAmplify = !!window.location.hostname.match(/\.playground\.pbskids\.org$/);
+        const apiUrl = deployedToAmplify ? actualApiUrl : '/proxy?url=' + actualApiUrl;
+
+        const response = await fetch(apiUrl).then((response) => response.json());
 
         const fromPumaApi = {
             hlsSrc: response.drm_hls_url,
