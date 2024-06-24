@@ -1,8 +1,17 @@
-import { drmEnabled, dashEnabled } from './config.js';
-import { getSourceUrl as getSourceUrlDRM } from './drm.js';
-import { getSourceUrl as getSourceUrlNoDRM, isMp4 as isUrlMp4 } from './non-drm.js';
+const getAssetUrlWithHash = (path) => {
+    const sep = path.indexOf('?') === -1 ? '?' : '&';
+    const hash = window.__frontendAssetHashes[path];
+    if (!hash) {
+        return `./${path}`;
+    }
+    return `./${path}${sep}hash=${hash}`;
+};
 
 const getSourceUrl = async (...args) => {
+    const { getSourceUrl: getSourceUrlDRM } = await import( getAssetUrlWithHash('drm.js') );
+    const { getSourceUrl: getSourceUrlNoDRM } = await import( getAssetUrlWithHash('non-drm.js') );
+    const { drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
+
     if (drmEnabled) {
         return getSourceUrlDRM(...args);
     } else {
@@ -66,7 +75,9 @@ navigator.serviceWorker.addEventListener('message', event => {
     }
 });
 
-const createPlayer = (livestreamEnabled) => {
+const createPlayer = async (livestreamEnabled) => {
+    const { drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
+
     document.querySelector('#video-js-version').value = videojs.VERSION;
 
     videojs.log.level('debug');
@@ -101,6 +112,7 @@ const createPlayer = (livestreamEnabled) => {
     const downloadButton = document.querySelector('#download-video');
 
     const setDownloadButtonState = async(url) => {
+        const { isMp4: isUrlMp4 } = await import( getAssetUrlWithHash('non-drm.js') );
         const isMp4 = isUrlMp4(url);
         const isDownloaded = isMp4 && await checkIsCached(url);
         downloadButton.innerHTML = isDownloaded ? 'Already Downloaded!' : downloadButton.getAttribute('data-original-text');
@@ -169,13 +181,15 @@ function docReady(fn) {
 }
 
 async function ready(fn) {
+    const { dashEnabled, drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
+
     const deps = [];
 
     if (drmEnabled) {
-        deps.push('./lib/videojs-contrib-eme.min.js');
+        deps.push( getAssetUrlWithHash('lib/videojs-contrib-eme.min.js') );
 
         if (dashEnabled) {
-            deps.push('./lib/videojs-dash.min.js');
+            deps.push( getAssetUrlWithHash('lib/videojs-dash.min.js') );
         }
     }
 
@@ -211,7 +225,9 @@ ready(() => {
     printConfig();
 });
 
-const printConfig = () => {
+const printConfig = async () => {
+    const { dashEnabled, drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
+
     document.querySelector('#harness-config-output').value =
         JSON.stringify(
             {

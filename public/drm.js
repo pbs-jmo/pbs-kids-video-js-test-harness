@@ -1,5 +1,16 @@
-import { dashEnabled, drmEnabled, isSafari } from './config.js';
-import { vodUrls as nonDrmVodUrls } from './non-drm.js';
+const getAssetUrlWithHash = (path) => {
+    const sep = path.indexOf('?') === -1 ? '?' : '&';
+    const hash = window.__frontendAssetHashes[path];
+    if (!hash) {
+        return `./${path}`;
+    }
+    return `./${path}${sep}hash=${hash}`;
+};
+
+const getNonDrmVodUrls = async () => {
+    const { vodUrls } = await import( getAssetUrlWithHash('non-drm.js') );
+    return vodUrls;
+};
 
 var keySystemsHls = (video) => {
     return {
@@ -80,42 +91,50 @@ const livestreamCallsigns = [
     'KOTH',
 ];
 
-const vodUrls = drmEnabled ? [
-    // Sci Girls - Bee Haven
-    // {
-    //     hlsSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-hls-16x9-720p.m3u8',
-    //     fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
-    //     fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-    //     dashSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-dash-16x9-720p.mpd',
-    //     widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
-    //     playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
-    // },
-    // Curious George - George Feels Sheepish
-    // source data: https://content.services.pbskids.org/v2/kidsios/videos/2141603345/
-    {
-        hlsSrc: 'https://urs-anonymous-detect.pbs.org/redirect/004f62ac62204454a1c6d477c19ae4d9/',
-        fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
-        fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
-        dashSrc: 'https://urs-anonymous-detect.pbs.org/redirect/723f2bdef5fc4274a01e040b2a515e5b/',
-        widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
-        playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
-    },
-    // non-DRM assets to test with:
-    ...nonDrmVodUrls,
-    /*
-    {
-        hlsSrc: '',
-        fairPlayLicenseServerUrl: '',
-        fairPlayCertificateServerUrl: '',
-        dashSrc: '',
-        widevineLicenseUrl: '',
-        playReadyLicenseUrl: '',
-    },
-    */
-] : nonDrmVodUrls;
+const getVodUrls = async () => {
+    const { drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
+    const nonDrmVodUrls = await getNonDrmVodUrls();
 
-const transformSources = function(video, contentDescription = '') {
+    return drmEnabled ? [
+        // Sci Girls - Bee Haven
+        // {
+        //     hlsSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-hls-16x9-720p.m3u8',
+        //     fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
+        //     fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
+        //     dashSrc: 'https://kids.video.cdn.pbs.org/videos/scigirls/b2c32b8c-5efd-40ea-bba4-12080c9b00a6/2000283369/hd-16x9-mezzanine-1080p/c23e8513_sgir208_episode_m1080-dash-16x9-720p.mpd',
+        //     widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
+        //     playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/b2c32b8c-5efd-40ea-bba4-12080c9b00a6',
+        // },
+        // Curious George - George Feels Sheepish
+        // source data: https://content.services.pbskids.org/v2/kidsios/videos/2141603345/
+        {
+            hlsSrc: 'https://urs-anonymous-detect.pbs.org/redirect/004f62ac62204454a1c6d477c19ae4d9/',
+            fairPlayLicenseServerUrl: 'https://proxy.drm.pbs.org/license/fairplay/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
+            fairPlayCertificateServerUrl: 'https://static.drm.pbs.org/fairplay-cert',
+            dashSrc: 'https://urs-anonymous-detect.pbs.org/redirect/723f2bdef5fc4274a01e040b2a515e5b/',
+            widevineLicenseUrl: 'https://proxy.drm.pbs.org/license/widevine/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
+            playReadyLicenseUrl: 'https://proxy.drm.pbs.org/license/playready/eeb2331a-8aee-47c2-ad1b-bdc03a464f88',
+        },
+        // non-DRM assets to test with:
+        ...nonDrmVodUrls,
+        /*
+        {
+            hlsSrc: '',
+            fairPlayLicenseServerUrl: '',
+            fairPlayCertificateServerUrl: '',
+            dashSrc: '',
+            widevineLicenseUrl: '',
+            playReadyLicenseUrl: '',
+        },
+        */
+    ] : nonDrmVodUrls;
+
+};
+
+const transformSources = async function(video, contentDescription = '') {
     if (!video) return;
+
+    const { dashEnabled, isSafari } = await import ( getAssetUrlWithHash('config.js') );
 
     if (isSafari && video.hlsSrc) {
         // Safari uses an HLS stream
@@ -160,6 +179,8 @@ const transformSources = function(video, contentDescription = '') {
 };
 
 const getSourceUrl = async (livestream, index = 0) => {
+    const vodUrls = await getVodUrls();
+
     if (livestream) {
         const callsign = livestreamCallsigns[index];
         if (!callsign) {
@@ -183,6 +204,5 @@ const getSourceUrl = async (livestream, index = 0) => {
 };
 
 export {
-    isSafari,
     getSourceUrl,
 };

@@ -8,3 +8,5 @@ cp node_modules/videojs-contrib-dash/dist/videojs-dash.min.js         public/lib
 
 cp node_modules/video.js/dist/video.min.js                            public/lib/video.min.js || exit
 cp node_modules/video.js/dist/video-js.min.css                        public/lib/video-js.min.css || exit
+
+node scripts/asset-hashes.js

@@ -4,15 +4,17 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "scripts/postinstall.sh && node src/server.js",
     "lint": "eslint --ext .js ./ --fix",
     "postinstall": "scripts/postinstall.sh"
   },
   "author": "Jeff Moore",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.10",
     "eslint": "^8.57.0",
     "express": "^4.19.2",
+    "md5": "^2.3.0",
     "node-fetch": "^3.3.2",
     "request": "^2.88.2",
     "video.js": "^8.12.0",
