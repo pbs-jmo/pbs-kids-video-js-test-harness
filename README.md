@@ -6,7 +6,7 @@ Install dependencies!
 
 `npm ci`
 
-Then, just run `npm start`. The link to your server will be provided in the terminal output.
+Then, just run `npm start` or `npm run watch`. The link to your server will be provided in the terminal output.
 
 ## Auto-Deployment to AWS Amplify
 

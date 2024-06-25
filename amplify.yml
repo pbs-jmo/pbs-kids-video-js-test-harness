@@ -1,3 +1,5 @@
+# Helps to read the docs: <https://docs.aws.amazon.com/amplify/latest/userguide/deploy-express-server.html>
+
 version: 1
 frontend:
   phases:
@@ -12,9 +14,8 @@ frontend:
         - if ! command -v nvm >/dev/null; then . ~/.nvm/nvm.sh; fi # When using a custom image, on Amplify, nvm is not available until we load it manually.
         - nvm install
         - nvm use
-        - npm start
   artifacts:
-    baseDirectory: public
+    baseDirectory: .amplify-hosting
     files:
       - '**/*'
   cache:

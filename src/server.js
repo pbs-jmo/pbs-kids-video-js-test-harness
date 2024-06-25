@@ -3,7 +3,7 @@ import { writeAssetHashes, generateIndexHtml  } from './asset-hashes.js';
 import express from 'express';
 import request from 'request';
 
-const port = 3047;
+const port = process.env.PORT || 3047;
 const rootUrl = `http://localhost:${port}`;
 const title = 'PBS KIDS Video.js Test Harness';
 
