@@ -1,6 +1,7 @@
 {
   "search.exclude": {
     "public/lib": true,
+    ".amplify-hosting/**": true,
     "package-lock.json": true,
   }
 }
