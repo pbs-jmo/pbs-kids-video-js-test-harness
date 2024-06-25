@@ -18,6 +18,10 @@ const serverAlreadyRunning = async () => {
     return running;
 };
 
+const listDirTest = (path) => {
+    console.log('listing for path', path, fs.readdirSync(path, { recursive: true }).join('\n'));
+};
+
 const init = async () => {
     const running = await serverAlreadyRunning();
     if (running) {
@@ -34,10 +38,10 @@ const init = async () => {
 
         app.use(express.static('public'));
     } else {
-        console.log(fs.readdirSync('./', { recursive: true }));
-        console.log(fs.readdirSync('../', { recursive: true }));
-        console.log(fs.readdirSync('../../', { recursive: true }));
-        console.log(fs.readdirSync('../../static', { recursive: true }));
+        listDirTest('./');
+        listDirTest('../');
+        listDirTest('../../');
+        listDirTest('../../static');
 
         app.use(express.static('../../static'));
     }
