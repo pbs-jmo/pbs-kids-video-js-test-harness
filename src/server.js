@@ -18,12 +18,6 @@ const serverAlreadyRunning = async () => {
     return running;
 };
 
-const listDirTest = (path) => {
-    try {
-        console.log('listing for path', path, fs.readdirSync(path).join(' | ').substring(0, 200));
-    } catch (e) { e; }
-};
-
 const init = async () => {
     const running = await serverAlreadyRunning();
     if (running) {
@@ -33,20 +27,13 @@ const init = async () => {
 
     // If running locally, write asset hashes and generate index.html
     // This is done in the postinstall script when deployed to Amazon
-    if (fs.existsSync('public')) {
+    if (!fs.existsSync('deployed-to-amplify')) {
         const { writeAssetHashes, generateIndexHtml  } =  await import('./asset-hashes.js');
         writeAssetHashes();
         generateIndexHtml();
-
-        app.use(express.static('public'));
-    } else {
-        listDirTest('./');
-        listDirTest('../');
-        listDirTest('../../');
-        listDirTest('../../static');
-
-        app.use(express.static('../../static'));
     }
+
+    app.use(express.static('public'));
 
     // Get around CORS restrictions
     app.get('/proxy', function(req,res) {
