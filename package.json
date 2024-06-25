@@ -8,6 +8,7 @@
     "serve": "scripts/postinstall.sh && PORT=3000 node src/server.js",
     "watch": "scripts/postinstall.sh && nodemon --watch src --watch public -e js,ejs,css src/server.js",
     "lint": "eslint --ext .js ./ --fix",
+    "postbuild": "chmod +x scripts/postbuild.sh && ./scripts/postbuild.sh",
     "postinstall": "scripts/postinstall.sh"
   },
   "author": "Jeff Moore",

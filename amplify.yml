@@ -14,6 +14,7 @@ frontend:
         - if ! command -v nvm >/dev/null; then . ~/.nvm/nvm.sh; fi # When using a custom image, on Amplify, nvm is not available until we load it manually.
         - nvm install
         - nvm use
+        - npm run postbuild
   artifacts:
     baseDirectory: .amplify-hosting
     files:
