@@ -1,9 +1,8 @@
-import { writeAssetHashes, generateIndexHtml  } from './asset-hashes.js';
-
+import fs from 'fs';
 import express from 'express';
 import request from 'request';
 
-const port = process.env.PORT || 3047;
+const port = process.env.PORT || 3000;
 const rootUrl = `http://localhost:${port}`;
 const title = 'PBS KIDS Video.js Test Harness';
 
@@ -26,15 +25,22 @@ const init = async () => {
         return;
     }
 
-    writeAssetHashes();
-    generateIndexHtml();
+    // If running locally, write asset hashes and generate index.html
+    // This is done in the postinstall script when deployed to Amazon
+    if (fs.existsSync('public')) {
+        const { writeAssetHashes, generateIndexHtml  } =  await import('./asset-hashes.js');
+        writeAssetHashes();
+        generateIndexHtml();
+
+        app.use(express.static('public'));
+    } else {
+        app.use(express.static('../../static'));
+    }
 
     // Get around CORS restrictions
     app.get('/proxy', function(req,res) {
         request(req.query.url).pipe(res);
     });
-
-    app.use(express.static('public'));
 
     app.listen(port, () => {
         console.log(`\n${title} web server is running at ${rootUrl}`);
