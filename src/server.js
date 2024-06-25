@@ -19,7 +19,9 @@ const serverAlreadyRunning = async () => {
 };
 
 const listDirTest = (path) => {
-    console.log('listing for path', path, fs.readdirSync(path, { recursive: true }).join(' | '));
+    try {
+        console.log('listing for path', path, fs.readdirSync(path).join(' | ').substring(0, 200));
+    } catch (e) { e; }
 };
 
 const init = async () => {
