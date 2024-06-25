@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "start": "npm -s run postinstall && PORT=3047 node src/server.js",
-    "serve": "node src/server.js",
     "watch": "npm -s run postinstall && PORT=3047 nodemon --watch src --watch public -e js,ejs,css src/server.js",
     "lint": "eslint --ext .js ./ --fix",
     "postbuild": "chmod +x scripts/postbuild.sh && ./scripts/postbuild.sh",
