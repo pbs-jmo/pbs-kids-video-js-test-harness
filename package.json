@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "scripts/postinstall.sh && nodemon --watch src --watch public -e js,ejs,css src/server.js",
+    "start": "scripts/postinstall.sh && node src/server.js",
+    "watch": "scripts/postinstall.sh && nodemon --watch src --watch public -e js,ejs,css src/server.js",
     "lint": "eslint --ext .js ./ --fix",
     "postinstall": "scripts/postinstall.sh"
   },
