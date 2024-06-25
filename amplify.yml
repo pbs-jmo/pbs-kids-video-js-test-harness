@@ -1,0 +1,19 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - if ! command -v nvm >/dev/null; then . ~/.nvm/nvm.sh; fi # When using a custom image, on Amplify, nvm is not available until we load it manually.
+        - nvm install
+        - nvm use
+        - npm ci
+    build:
+      commands:
+        - if ! command -v nvm >/dev/null; then . ~/.nvm/nvm.sh; fi # When using a custom image, on Amplify, nvm is not available until we load it manually.
+        - nvm install
+        - nvm use
+        - npm start
+  cache:
+    paths:
+      - ~/.npm/**/*
+      - ~/.cache/**/*
