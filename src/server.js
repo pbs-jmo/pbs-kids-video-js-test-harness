@@ -34,6 +34,11 @@ const init = async () => {
 
         app.use(express.static('public'));
     } else {
+        console.log(fs.readdirSync('./', { recursive: true }));
+        console.log(fs.readdirSync('../', { recursive: true }));
+        console.log(fs.readdirSync('../../', { recursive: true }));
+        console.log(fs.readdirSync('../../static', { recursive: true }));
+
         app.use(express.static('../../static'));
     }
 
