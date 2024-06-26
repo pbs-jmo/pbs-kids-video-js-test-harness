@@ -4,5 +4,6 @@
     "public/index.html": true,
     ".amplify-hosting/**": true,
     "package-lock.json": true,
+    "public/sw.js": true,
   }
 }
