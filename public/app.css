@@ -19,10 +19,16 @@ input:not([type=radio]) {
     aspect-ratio: 16 / 9;
     margin: 0 auto;
 }
+
+@media screen and (max-width: 768px) {
+    .video-element:not(.is-fullscreen) {
+        max-height: 50vh;
+    }
+}
+
 .video-js .vjs-big-play-button {
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
 }
 .external-controls {
     text-align: center;
