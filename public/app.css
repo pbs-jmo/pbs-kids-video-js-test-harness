@@ -15,7 +15,7 @@ input:not([type=radio]) {
     /* width: auto;
     height: auto; */
     max-width: 100%;
-    max-height: 90vh;
+    max-height: 60vh;
     aspect-ratio: 16 / 9;
     margin: 0 auto;
 }
