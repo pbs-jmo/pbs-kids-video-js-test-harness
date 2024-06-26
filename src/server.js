@@ -55,6 +55,7 @@ const init = async () => {
     app.get('/proxy', function(req,res) {
         // Added security when deployed to Amplify. Deny requests from outside sources.
         if (isDeployedToAmplify && !isProxyRequestAllowed(req)) {
+            console.error(`Invalid request from ${req.headers?.referer} to ${req.headers?.host}}`);
             throw new Error('Invalid request');
         }
 
