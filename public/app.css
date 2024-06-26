@@ -7,32 +7,15 @@ input:not([type=radio]) {
     width: 100%;
     box-sizing: border-box;
 }
-.player-wrapper  {
-    display: flex;
+.player-outer {
     background: rgba(0,0,0,.8);
+}
+.player-wrapper  {
+    max-width: calc(80vh / 9 * 16);
+    margin: 0 auto;
 }
 .video-element {
     cursor: pointer;
-}
-
-.video-element:not(.is-fullscreen) {
-    /* width: auto;
-    height: auto; */
-    max-width: 100%;
-    max-height: calc((100vw / 16 * 9) - 50vh);
-    aspect-ratio: 16 / 9;
-    margin: 0 auto;
-}
-
-@media screen and (max-width: 1280px) {
-    .video-element:not(.is-fullscreen) {
-        max-height: 50vh;
-    }
-}
-
-.video-js .vjs-big-play-button {
-    left: 50%;
-    top: 50%;
 }
 .external-controls {
     text-align: center;

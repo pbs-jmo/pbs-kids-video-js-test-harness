@@ -93,6 +93,7 @@ const createPlayer = async (livestreamEnabled) => {
         controls: true,
         autoplay: true,
         preload: 'auto',
+        fluid: true,
         html5: {},
     };
 
