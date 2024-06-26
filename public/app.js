@@ -27,6 +27,15 @@ function bindPlayerEvents(player) {
         isFullscreen = !isFullscreen;
         playerElement.classList.toggle('is-fullscreen', isFullscreen);
     });
+
+    // Turn on first caption track by default
+    // Source: https://stackoverflow.com/a/19239919
+    player.on('loadedmetadata', () => {
+        const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item');
+        if (firstCaptionOption) {
+            firstCaptionOption.click();
+        }
+    });
 }
 
 const awaitPreCaching = async (url) => {
@@ -106,15 +115,6 @@ const createPlayer = async (livestreamEnabled) => {
     if (typeof player.eme === 'function' && drmEnabled) {
         player.eme();
     }
-
-    // Turn on first caption track by default
-    // Source: https://stackoverflow.com/a/19239919
-    player.one('loadedmetadata', () => {
-        const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item');
-        if (firstCaptionOption) {
-            firstCaptionOption.click();
-        }
-    });
 
     const downloadButton = document.querySelector('#download-video');
 
