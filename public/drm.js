@@ -188,7 +188,7 @@ const getSourceUrl = async (livestream, index = 0) => {
         }
 
         const actualApiUrl = 'https://pbskids.org/api/puma/video/livestream/' + callsign;
-        const apiUrl = '/proxy?url=' + actualApiUrl;
+        const apiUrl = 'https://corsproxy.io/?' + encodeURIComponent(actualApiUrl);
 
         const response = await fetch(apiUrl).then((response) => response.json());
 
