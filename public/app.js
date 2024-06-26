@@ -78,8 +78,6 @@ navigator.serviceWorker.addEventListener('message', event => {
 const createPlayer = async (livestreamEnabled) => {
     const { drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
 
-    document.querySelector('#video-js-version').value = videojs.VERSION;
-
     videojs.log.level('debug');
 
     const options = {
@@ -110,6 +108,7 @@ const createPlayer = async (livestreamEnabled) => {
     }
 
     // Turn on first caption track by default
+    // Source: https://stackoverflow.com/a/19239919
     player.one('loadedmetadata', () => {
         document.querySelector('.vjs-menu-item.vjs-captions-menu-item').click();
     });
@@ -212,6 +211,12 @@ const loadScript = (url) => new Promise((resolve, reject) => {
 });
 
 ready(() => {
+    // Check reported installed version number against what's actually being loaded
+    const installedVideoJsVerion = window.__videoDependencies['video.js'];
+    if (installedVideoJsVerion !== videojs.VERSION) {
+        throw new Error(`Expected video.js version ${installedVideoJsVerion} but got ${videojs.VERSION}`);
+    }
+
     streamTypeRadioButtons.forEach((inputEle) => {
         // init player as stream type already selected
         if (inputEle.checked) {

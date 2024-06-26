@@ -3,7 +3,10 @@
 <head>
     <title>PBS KIDS Video.js Test Harness</title>
     <meta charset="utf-8">
-    <script>window.__frontendAssetHashes = JSON.parse('<%- frontendAssetHashes %>');</script>
+    <script>
+    window.__frontendAssetHashes = JSON.parse('<%- frontendAssetHashes %>');
+    window.__videoDependencies = JSON.parse('<%- videoDependenciesAsString %>');
+    </script>
     <link type="text/css" rel="stylesheet" href="<%- getAssetUrlWithHash('lib/video-js.min.css') %>">
     <link type="text/css" rel="stylesheet" href="<%- getAssetUrlWithHash('app.css') %>">
     <!-- <script src="<%- getAssetUrlWithHash('sw-init.js') %>"></script> -->
@@ -32,8 +35,8 @@
 <h4>Current Video Source URL:</h4>
 <p><input id="current-source-url"></input></p>
 
-<h4>Video.js Version:</h4>
-<p><input id="video-js-version"></input></p>
+<h4>Video package versions:</h4>
+<textarea id="video-package-versions"><%- JSON.stringify(videoDependencies, null, 2) %></textarea>
 
 <h4>Config:</h4>
 <textarea id="harness-config-output"></textarea>

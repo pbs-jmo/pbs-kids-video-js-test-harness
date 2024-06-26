@@ -1,3 +1,4 @@
+import { getVideoDependencyVersions } from './package-versions.js';
 import ejs from 'ejs';
 import fs from 'fs';
 import md5 from 'md5';
@@ -8,6 +9,9 @@ const ignoreFiles = [
     'asset-hashes.json',
     '.DS_Store',
 ];
+
+const videoDependencies = getVideoDependencyVersions();
+const videoDependenciesAsString = JSON.stringify(videoDependencies);
 
 const getMd5sForFilesInDir = (dirPath) => {
     const files = [];
@@ -70,6 +74,8 @@ const generateIndexHtml = () => {
     const result = ejs.compile(fs.readFileSync('./src/index.ejs').toString())( {
         frontendAssetHashes: getFrontendAssetHashes(),
         getAssetUrlWithHash,
+        videoDependencies,
+        videoDependenciesAsString,
     });
 
     fs.writeFileSync('./public/index.html', result);
