@@ -110,7 +110,10 @@ const createPlayer = async (livestreamEnabled) => {
     // Turn on first caption track by default
     // Source: https://stackoverflow.com/a/19239919
     player.one('loadedmetadata', () => {
-        document.querySelector('.vjs-menu-item.vjs-captions-menu-item').click();
+        const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item');
+        if (firstCaptionOption) {
+            firstCaptionOption.click();
+        }
     });
 
     const downloadButton = document.querySelector('#download-video');
