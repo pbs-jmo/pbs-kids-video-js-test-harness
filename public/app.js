@@ -109,6 +109,11 @@ const createPlayer = async (livestreamEnabled) => {
         player.eme();
     }
 
+    // Turn on first caption track by default
+    player.one('loadedmetadata', () => {
+        document.querySelector('.vjs-menu-item.vjs-captions-menu-item').click();
+    });
+
     const downloadButton = document.querySelector('#download-video');
 
     const setDownloadButtonState = async(url) => {
