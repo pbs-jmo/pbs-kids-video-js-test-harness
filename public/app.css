@@ -11,6 +11,10 @@ input:not([type=radio]) {
     display: flex;
     background: rgba(0,0,0,.8);
 }
+.video-element {
+    cursor: pointer;
+}
+
 .video-element:not(.is-fullscreen) {
     /* width: auto;
     height: auto; */
