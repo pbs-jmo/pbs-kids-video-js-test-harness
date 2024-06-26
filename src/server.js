@@ -18,7 +18,23 @@ const serverAlreadyRunning = async () => {
     return running;
 };
 
+const isRefererAmplifyUrl = (req) => {
+    const pattern = /\/\/([^/]+\.)?pbskids\.org(\/|$)/i;
+    return !!req?.headers?.referer?.match(pattern);
+};
+
+const isRequestingHostAmplify = (req) => {
+    const pattern = /\.pbskids\.org$/;
+    return !!req.headers.host.match(pattern);
+};
+
+const isProxyRequestAllowed = (req) => {
+    return isRequestingHostAmplify(req) && isRefererAmplifyUrl(req);
+};
+
 const init = async () => {
+    const isDeployedToAmplify = fs.existsSync('deployed-to-amplify');
+
     const running = await serverAlreadyRunning();
     if (running) {
         console.log('\nFailed to start local express server. It looks like you may already have a server running?');
@@ -27,7 +43,7 @@ const init = async () => {
 
     // If running locally, write asset hashes and generate index.html
     // This is done in the postinstall script when deployed to Amazon
-    if (!fs.existsSync('deployed-to-amplify')) {
+    if (!isDeployedToAmplify) {
         const { writeAssetHashes, generateIndexHtml  } =  await import('./asset-hashes.js');
         writeAssetHashes();
         generateIndexHtml();
@@ -37,6 +53,11 @@ const init = async () => {
 
     // Get around CORS restrictions
     app.get('/proxy', function(req,res) {
+        // Added security when deployed to Amplify. Deny requests from outside sources.
+        if (isDeployedToAmplify && !isProxyRequestAllowed(req)) {
+            throw new Error('Invalid request');
+        }
+
         request(req.query.url).pipe(res);
     });
 
