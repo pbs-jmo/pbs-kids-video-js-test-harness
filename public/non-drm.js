@@ -5,17 +5,21 @@ const livestreamUrls = [
 ];
 
 const vodUrls = [
+    // Daniel Tiger full episode
     {
-        // Alma with multiple embedded caption tracks
+        URI: 'https://urs.pbs.org/redirect/2c4144a7d2b544e3864e79f3ac77d901/',
+    },
+    // Alma with multiple embedded caption tracks
+    {
         URI: 'https://urs.pbs.org/redirect/4700fc9ce3654354b6102d87ae6cee46/'
+    },
+    // Wild Kratts
+    {
+        URI: 'https://urs.pbs.org/redirect/34ac8d08fe6841f896e5b21aa0b227bc/',
     },
     // Sesame Street full episode
     {
         URI: 'https://urs.pbs.org/redirect/c2e2c6f5cf894fcab7b456f7d93b6592/',
-    },
-    // Daniel Tiger full episode
-    {
-        URI: 'https://urs.pbs.org/redirect/2c4144a7d2b544e3864e79f3ac77d901/',
     },
     {
         // Arthur - Library Song

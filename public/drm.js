@@ -87,8 +87,8 @@ const livestreamUrls = [
 */
 
 const livestreamCallsigns = [
-    'KOTH',
     'WETA',
+    'KOTH',
 ];
 
 const getVodUrls = async () => {
