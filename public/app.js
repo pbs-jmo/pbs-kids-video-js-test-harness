@@ -33,7 +33,7 @@ function bindPlayerEvents(player) {
     player.on('loadedmetadata', () => {
         var retried = 1;
         const retryCaptionButton = setInterval(() => {
-            const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item');
+            const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item') || document.querySelector('.vjs-menu-item.vjs-subtitles-menu-item');
 
             if (firstCaptionOption) {
                 firstCaptionOption.click();
