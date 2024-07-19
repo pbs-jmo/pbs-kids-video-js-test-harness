@@ -19,10 +19,10 @@ const vodUrls = [
     },
     // Sesame Street full episode
     {
-        URI: 'https://urs.pbs.org/redirect/c2e2c6f5cf894fcab7b456f7d93b6592/',
+        URI: 'https://urs.pbs.org/redirect/3f250a108e8144d3ad3c6971d4ac8ada/',
     },
+    // Arthur - Library Song
     {
-        // Arthur - Library Song
         URI: 'https://urs.pbs.org/redirect/8dc42c59d89d4455ad76b7637129b634/',
     },
 ];
