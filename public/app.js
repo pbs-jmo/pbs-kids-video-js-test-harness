@@ -128,7 +128,8 @@ const createPlayer = async (livestreamEnabled) => {
     };
 
     downloadButton.addEventListener('click', async (e) => {
-        const url = await getSourceUrl(livestreamEnabled, currentUrlIndex)?.[0]?.src;
+        const source = await getSourceUrl(livestreamEnabled, currentUrlIndex);
+        const url = source && source[0] && source[0].src ? source[0].src : null;
 
         if (url) {
             e.target.disabled = true;
