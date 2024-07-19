@@ -31,10 +31,20 @@ function bindPlayerEvents(player) {
     // Turn on first caption track by default
     // Source: https://stackoverflow.com/a/19239919
     player.on('loadedmetadata', () => {
-        const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item');
-        if (firstCaptionOption) {
-            firstCaptionOption.click();
-        }
+        var retried = 1;
+        const retryCaptionButton = setInterval(() => {
+            const firstCaptionOption = document.querySelector('.vjs-menu-item.vjs-captions-menu-item');
+
+            if (firstCaptionOption) {
+                firstCaptionOption.click();
+                console.info('Enabled captions after ' + retried + ' retries');
+                clearInterval(retryCaptionButton);
+            } else if (retried >= 10) {
+                clearInterval(retryCaptionButton);
+                console.error('Failed enabling captions after ' + retried + ' retries');
+            }
+            retried++;
+        }, 400);
     });
 }
 
