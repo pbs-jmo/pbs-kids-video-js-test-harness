@@ -28,6 +28,10 @@ function bindPlayerEvents(player) {
         playerElement.classList.toggle('is-fullscreen', isFullscreen);
     });
 
+    player.on('timeupdate', function () {
+        player.textTrackSettings.saveSettings();
+    });
+
     // Turn on first caption track by default
     // Source: https://stackoverflow.com/a/19239919
     player.on('loadedmetadata', () => {
@@ -103,6 +107,7 @@ const createPlayer = async (livestreamEnabled) => {
         controls: true,
         autoplay: true,
         preload: 'auto',
+        persistTextTrackSettings: true,
         fluid: true,
         html5: {},
     };
