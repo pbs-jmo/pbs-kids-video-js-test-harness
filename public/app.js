@@ -1,3 +1,5 @@
+'use strict';
+
 const getAssetUrlWithHash = (path) => {
     const sep = path.indexOf('?') === -1 ? '?' : '&';
     const hash = window.__frontendAssetHashes[path];
@@ -98,10 +100,78 @@ navigator.serviceWorker.addEventListener('message', event => {
     }
 });
 
+const logger = console;
+const compLogs = window.comparativeLogs = { version: undefined, src: undefined, options: undefined };
+
+/*
+Use in console:
+copy(JSON.stringify(comparativeLogs, null, 2))
+*/
+
+const sortObjectByKeys = (unordered) => Object.keys(unordered).sort().reduce(
+    (obj, key) => {
+        obj[key] = unordered[key];
+        return obj;
+    },
+    {},
+);
+
+const comparativeLog = (versions, src, options, player) => {
+    if (versions) {
+        const now = new Date().toLocaleDateString('en-US', {
+            second: 'numeric',
+            minute: 'numeric',
+            hour: 'numeric',
+            day: 'numeric',
+            month: 'numeric',
+            year: '2-digit',
+            hour12: false,
+            timeZone: 'America/New_York',
+            timeZoneName: 'short',
+        });
+        compLogs.versions = versions + ' ' + now;
+        logger.debug(versions);
+    }
+    if (src) {
+        compLogs.src = src;
+        logger.debug('video.js player.src', JSON.stringify(src, null, 2));
+    }
+    if (options) {
+        const tech = sortObjectByKeys(Object.assign({}, player.tech('')));
+        delete tech.player_;
+        tech.options_ = sortObjectByKeys(tech.options_);
+
+        const textTracks = player.textTracks().tracks_.map((a) => {
+            return {
+                kind: a.kind,
+                label: a.label,
+                language: a.language,
+                mode: a.mode,
+                cues: a.cues,
+            };
+        });
+
+        compLogs.options = {
+            passed: options,
+            merged: player.options_,
+            tech,
+            plugins: Object.keys(videojs.getPlugins()),
+            markup: player.el().outerHTML,
+            textTracks,
+            vhs: videojs.Vhs,
+            isSafari: videojs.browser.IS_SAFARI,
+            childrenHtml: player.children().map((e) => e.outerHTML || e?.el()?.outerHTML),
+            language: player.language(),
+        };
+        logger.debug('video.js options', JSON.stringify(options, null, 2));
+        logger.debug('video.js .options_', JSON.stringify(player.options_, null, 2));
+    }
+};
+
 const createPlayer = async (livestreamEnabled) => {
     const { drmEnabled } = await import ( getAssetUrlWithHash('config.js') );
 
-    videojs.log.level('debug');
+    // videojs.log.level('debug');
 
     const options = {
         controls: true,
@@ -122,15 +192,31 @@ const createPlayer = async (livestreamEnabled) => {
     var playerWrapper = document.querySelector('.player-wrapper');
     playerWrapper.prepend(playerElement);
 
-    console.debug('video.js options', JSON.stringify(options, null, 2));
+    const player = window.player = videojs('video-element',  options);
 
-    const player = window._player = videojs('video-element',  options);
+    if (player) {
+        comparativeLog(
+            `video.js version: ${videojs.VERSION}  ||  EME plugin version: ${videojs.getPlugins().eme.VERSION}  ||  Test Harness`,
+            '',
+            options,
+            player
+        );
+    }
+
+
 
     bindPlayerEvents(player);
 
     if (typeof player.eme === 'function' && drmEnabled) {
         player.eme();
     }
+
+    // const initLegacyFairplay = player?.eme?.initLegacyFairplay;
+
+    // if (typeof initLegacyFairplay === 'function') {
+    //     // This call allows the latest EME plugin (v5) to work with older and current Fairplay versions.
+    //     initLegacyFairplay();
+    // }
 
     const downloadButton = document.querySelector('#download-video');
 
@@ -159,10 +245,11 @@ const createPlayer = async (livestreamEnabled) => {
 
     const setSourceUrl = async (livestream, index = 0) => {
         const sources = await getSourceUrl(livestream, index);
+        const source = sources[0];
         const url = sources && sources[0] ? sources[0].src : null;
         if (url) {
-            console.debug('video.js player.src getting set to:', JSON.stringify(sources, null, 2));
-            player.src(sources[0]);
+            comparativeLog('', source);
+            player.src(source);
             currentSrcEle.value = url;
             currentSrcDesc.value = sources[0].contentDescription || sources[0].URI || sources[0].mp4 || sources[0].src;
             currentSrcDesc.value = (sources[0].keySystemOptions ? '(DRM) ' : '(non-DRM) ') + currentSrcDesc.value;
@@ -210,10 +297,10 @@ async function ready(fn) {
     const deps = [];
 
     if (drmEnabled) {
-        deps.push( getAssetUrlWithHash('lib/videojs-contrib-eme.min.js') );
+        deps.push( getAssetUrlWithHash('lib/videojs-contrib-eme.js') );
 
         if (dashEnabled) {
-            deps.push( getAssetUrlWithHash('lib/videojs-dash.min.js') );
+            deps.push( getAssetUrlWithHash('lib/videojs-dash.js') );
         }
     }
 
@@ -232,9 +319,9 @@ const loadScript = (url) => new Promise((resolve, reject) => {
 
 ready(() => {
     // Check reported installed version number against what's actually being loaded
-    const installedVideoJsVerion = window.__videoDependencies['video.js'];
-    if (installedVideoJsVerion !== videojs.VERSION) {
-        throw new Error(`Expected video.js version ${installedVideoJsVerion} but got ${videojs.VERSION}`);
+    const installedVideoJsVersion = window.__videoDependencies['video.js'];
+    if (installedVideoJsVersion !== videojs.VERSION) {
+        throw new Error(`Expected video.js version ${installedVideoJsVersion} but got ${videojs.VERSION}`);
     }
 
     streamTypeRadioButtons.forEach((inputEle) => {

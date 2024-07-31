@@ -131,7 +131,7 @@ const getVodUrls = async () => {
 
 };
 
-const transformSources = async function(video, contentDescription = '') {
+const transformSources = async function(video, contentDescription = undefined) {
     if (!video) return;
 
     const { dashEnabled, isSafari } = await import ( getAssetUrlWithHash('config.js') );
